@@ -82,6 +82,7 @@ class Agent(object):
 agent = Agent()
 
 for i_episode in range(TOTAL_EPISODES):
+    print("\repisode:", i_episode, end='')
     state = env.reset()
     state = preprocess(state)
     while True:
@@ -113,6 +114,6 @@ for i_episode in range(TOTAL_EPISODES):
             state = next_state
             if done:
                 break
-        print('episode: {} , total_reward: {}'.format(i_episode, round(total_reward, 3)))
+        print('\repisode: {} , total_reward: {}'.format(i_episode, round(total_reward, 3)))
 
 env.close()

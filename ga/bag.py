@@ -1,7 +1,7 @@
 # coding=utf-8
 import random
-#背包问题
-#物品质量价格
+# 背包问题
+# 物品质量、价格
 X = {
     1: [10, 15],
     2: [15, 25],
@@ -10,23 +10,24 @@ X = {
     5: [30, 55],
     6: [35, 70]}
 
-#终止界限
-FINISHED_LIMIT = 5
+# 终止演化的界限
+FINISHED_LIMIT = 1
 
-#重量界限
+# 重量界限
 WEIGHT_LIMIT = 80
 
-#染色体长度
+# 染色体长度
 CHROMOSOME_SIZE = 6
 
-#遴选次数
+# 遴选次数
 SELECT_NUMBER = 4
 
 max_last = 0
 diff_last = 10000
 
-#判断退出
+
 def is_finished(fitnesses):
+    '''判断退出'''
     global max_last
     global diff_last
 
@@ -43,8 +44,9 @@ def is_finished(fitnesses):
         max_last = max_current
         return False
 
-#初始染色体样态
+
 def init():
+    '''初始染色体样态'''
     chromosome_state1 = '100100'
     chromosome_state2 = '101010'
     chromosome_state3 = '010101'
@@ -56,7 +58,7 @@ def init():
     return chromosome_states
 
 
-#计算适应度
+# 计算适应度
 def fitness(chromosome_states):
     fitnesses = []
     for chromosome_state in chromosome_states:
@@ -70,9 +72,9 @@ def fitness(chromosome_states):
     return fitnesses
 
 
-#筛选
+# 筛选
 def filter(chromosome_states, fitnesses):
-    #重量大于80的被淘汰
+    # 重量大于80的被淘汰
     index = len(fitnesses) - 1
     while index >= 0:
         index -= 1
@@ -80,7 +82,7 @@ def filter(chromosome_states, fitnesses):
             chromosome_states.pop(index)
             fitnesses.pop(index)
 
-    #遴选
+    # 遴选
     selected_index = [0] * len(chromosome_states)
     for i in range(SELECT_NUMBER):
         j = chromosome_states.index(random.choice(chromosome_states))
@@ -88,7 +90,7 @@ def filter(chromosome_states, fitnesses):
     return selected_index
 
 
-#产生下一代
+# 产生下一代
 def crossover(chromosome_states, selected_index):
     chromosome_states_new = []
     index = len(chromosome_states) - 1
@@ -98,26 +100,27 @@ def crossover(chromosome_states, selected_index):
         for i in range(selected_index[index]):
             chromosome_state_x = random.choice(chromosome_states)
             pos = random.choice(range(1, CHROMOSOME_SIZE - 1))
-            chromosome_states_new.append(chromosome_state[:pos] + chromosome_state_x[pos:])
+            chromosome_states_new.append(
+                chromosome_state[:pos] + chromosome_state_x[pos:])
         chromosome_states.insert(index, chromosome_state)
     return chromosome_states_new
 
 
 if __name__ == '__main__':
-    #初始群体
+    # 初始群体
     chromosome_states = init()
     n = 100
     while n > 0:
         n -= 1
-        #适应度计算
+        # 适应度计算
         fitnesses = fitness(chromosome_states)
         if is_finished(fitnesses):
             break
         print('1:', fitnesses)
-        #遴选
+        # 遴选
         selected_index = filter(chromosome_states, fitnesses)
         print('2:', selected_index)
-        #产生下一代
+        # 产生下一代
         chromosome_states = crossover(chromosome_states, selected_index)
         # print '3:', chromosome_states
 
